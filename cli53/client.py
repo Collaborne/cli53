@@ -180,7 +180,7 @@ class AWS:
                         self.alias_hosted_zone_id, self.alias_dns_name,
                         self.identifier)
                 elif self.failover is not None:
-                    return 'failover:%s %s %s' % (self.failover,
+                    return 'failover:%s %s %s %s' % (self.failover,
                         self.alias_hosted_zone_id, self.alias_dns_name,
                         self.identifier)
             return '%s %s' % (self.alias_hosted_zone_id, self.alias_dns_name)
@@ -580,6 +580,8 @@ def _create_rdataset(rtype, ttl, values, weight, identifier, region, failover):
                 elif failover is not None:
                     rdtype = AWS.A(AWS.RDCLASS, dns.rdatatype.A, value, None,
                         identifier, None, failover)
+                else:
+                    raise ValueError('unsupported alias type')
         else:
             raise ValueError('record type %s not handled' % rtype)
         rdataset.items.append(rdtype)
@@ -1055,7 +1057,7 @@ def main(connection=None):
     parser_rrcreate.add_argument('-w', '--weight', type=int, help='record weight')
     parser_rrcreate.add_argument('-i', '--identifier', help='record set identifier')
     parser_rrcreate.add_argument('--region', help='region for latency-based routing')
-    parser_rrcreate.add_argument('--failover', help='failover type for dns failover routing')
+    parser_rrcreate.add_argument('--failover', choices=['PRIMARY', 'SECONDARY'], help='failover type for dns failover routing')
     parser_rrcreate.add_argument('-r', '--replace', action='store_true', help='replace any existing record')
     parser_rrcreate.add_argument(
         '--wait', action='store_true', default=False, help='wait for changes to become live before exiting (default: '
