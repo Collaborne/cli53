@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from setuptools import Command
 
-__version__ = '0.5.0-collaborne-2-SNAPSHOT'
+__version__ = '0.5.0-collaborne-3-SNAPSHOT'
 long_description = file('README.markdown', 'r').read()
 
 class tag(Command):
